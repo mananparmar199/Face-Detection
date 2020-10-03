@@ -1,14 +1,31 @@
+#here we import required libraries for this project that is Numpy and Opencv 
 import numpy as np
 import cv2
 
+
+# Loading the PreTrained Cascade that is Haarcascade for face using this command.
 face_cascade = cv2.CascadeClassifier( "/home/manan/Documents/Sem 4/Programming for Scientific Computing/Face detection/haarcascade_frontalface_default.xml")
 
+
+#this command is used to access our device webcam.
 cap = cv2.VideoCapture(0)
 
+#The live feed coming from the webcam/video device is processed frame by frame.
 while(True):
+
+    #this block is used to read and conversion from bgr to grey scale images
+    #We process the gray scale image, as haar-cascades work better on them.
     ret , frame= cap.read()
     gray = cv2.cvtColor(frame,cv2.COLOR_BGR2GRAY)
+    
+    
+    #To detect the face, we use this function with 5 nearest neighbours.
     faces = face_cascade.detectMultiScale(gray,scaleFactor=1.5,minNeighbors=5)
+    
+    
+    #The face data is stored as tuples of coordinates
+    #The cv2.rectangle function takes in the arguments frame, upper-left coordinates of the face,
+    #lower right coordinates, the RGB code for the rectangle.
     for(x,y,w,h) in faces:
         print(x,y,w,h)
         color = (255,0,0,0)
@@ -18,6 +35,7 @@ while(True):
         cv2.rectangle(frame,(x,y),(end_cord_x,end_cord_y),color,stroke)
 
 
+    #this command is used to show the output result.
     cv2.imshow('frame',frame)
     if cv2.waitKey(20) & 0xFF == ord('q'):
         break
